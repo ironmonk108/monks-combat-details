@@ -914,8 +914,14 @@ Hooks.on("renderSettingsConfig", (app, html, data) => {
 
 Hooks.on("preUpdateActor", function (document, data, options, userid) {
     let hp = foundry.utils.getProperty(data, 'system.attributes.hp.value');
-    if (game.system.id == "cyberpunk-red-core")
-        hp = foundry.utils.getProperty(data, 'system.derivedStats.hp.value');
+    switch (game.system.id) {
+        case "cyberpunk-red-core":
+            hp = foundry.utils.getProperty(data, 'system.derivedStats.hp.value');
+            break;
+        case "demonlord":
+            hp = foundry.utils.getProperty(document, 'system.characteristics.health.max')-foundry.utils.getProperty(document, 'system.characteristics.health.value');
+            break;
+    }
     MonksCombatDetails.AutoDefeated(hp, document, document.token);
 
 });
