@@ -131,6 +131,8 @@
 
 	"MonksCombatDetails.CombatDisplayBars": "Combat Display Bars:",
 
+	"MonksCombatDetails.PlaceholderCombatantName": "Placeholder",
+
 	"MonksCombatDetails.unknown": "-",
 	"MonksCombatDetails.easy": "Easy",
 	"MonksCombatDetails.average": "Average",

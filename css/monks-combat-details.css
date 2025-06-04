@@ -22,6 +22,10 @@
     line-height: 25px;
 }
 
+.encounter-cr-row h4 {
+    margin-bottom: 0px;
+}
+
 .encounter-cr {
     display: inline-block;
     padding: 2px 4px;
@@ -77,7 +81,7 @@
     min-height: 38px;
 }
 
-#chat-log .message.round-marker {
+.chat-log .message.round-marker {
     background: none !important;
     border: none !important;
     border-radius: 0px;
@@ -88,70 +92,71 @@
     background-image: none !important;
 }
 
-#chat-log .message.round-marker::before {
+.chat-log .message.round-marker::before {
     background: none !important;
 }
 
-body.system-sw5e #chat-log .message.round-marker {
+body.system-sw5e .chat-log .message.round-marker {
     border-bottom: transparent !important;
 }
 
-#chat-log .message.round-marker .message-header {
+.chat-log .message.round-marker .message-header {
     flex-direction: row-reverse;
 }
 
-#chat-log .message.round-marker .message-header .message-sender,
-#chat-log .message.round-marker .message-header .message-timestamp,
-#chat-log .message.round-marker .message-content {
+.chat-log .message.round-marker .message-header .message-sender,
+.chat-log .message.round-marker .message-header .message-timestamp,
+.chat-log .message.round-marker .message-content {
     display: none !important;
     border-bottom: none !important;
     padding: 0px
 }
 
-#chat-log .message.round-marker .message-header .flavor-text {
+.chat-log .message.round-marker .message-header .flavor-text {
     flex: 1;
     color: #f0f0e0 !important;
     grid-area: unset;
 }
 
-#chat-log .message.round-marker .message-header .chat-control {
+.chat-log .message.round-marker .message-header .chat-control {
     color: #f0f0e0 !important;
 }
 
-body.light-theme.system-sw5e #chat-log .message.round-marker .message-header .flavor-text,
-body.light-theme.system-sw5e #chat-log .message.round-marker .message-header .chat-control {
+body.light-theme.system-sw5e .chat-log .message.round-marker .message-header .flavor-text,
+body.light-theme.system-sw5e .chat-log .message.round-marker .message-header .chat-control {
     color: #c40f0f !important;
 }
 
-body.dark-theme.system-sw5e #chat-log .message.round-marker .message-header .flavor-text {
+body.dark-theme.system-sw5e .chat-log .message.round-marker .message-header .flavor-text {
     color: #E81111 !important;
     font-weight: bold;
     text-shadow: 2px 2px #363636;
 }
 
-body.dark-theme.system-sw5e #chat-log .message.round-marker .message-header .chat-control {
+body.dark-theme.system-sw5e .chat-log .message.round-marker .message-header .chat-control {
     color: #E81111 !important;
 }
 
-#chat-log .message.round-marker .message-header .message-metadata {
+.chat-log .message.round-marker .message-header .message-metadata {
     background-color: transparent;
     background-image: none;
+    flex: 1;
 }
 
-body.system-dnd5e #chat-log .message.round-marker .message-header .message-metadata {
+body.system-dnd5e .chat-log .message.round-marker .message-header .message-metadata {
     margin-top: 10px;
     line-height: 2px;
     color: var(--color-text-dark-secondary);
 }
 
-#chat-log .message.round-marker .message-header .message-delete,
-body.system-dnd5e #chat-log .message.round-marker .message-header .chat-control i {
+.chat-log .message.round-marker .message-header .message-delete,
+body.system-dnd5e .chat-log .message.round-marker .message-header .chat-control i {
     color: var(--color-text-dark-secondary);
     margin-right: 5px;
 }
 
-#chat-log .message.round-marker .message-header .message-delete:hover,
-body.system-dnd5e #chat-log .message.round-marker .message-header .chat-control i:hover {
+.chat-log .message.round-marker .message-header .message-delete:hover,
+body.system-dnd5e .chat-log .message.round-marker .message-header .chat-control i:hover {
     color: var(--stat-font);
 }
 

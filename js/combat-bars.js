@@ -28,7 +28,7 @@ export class CombatBars {
             let displayBars = $('[name="displayBars"]', html).parents('div.form-group');
             let combatBars = displayBars.clone(true);
 
-            let value = (app.object instanceof TokenDocument ? app.object.getFlag('monks-combat-details', 'displayBarsCombat') : foundry.utils.getProperty(app.object.token, "flags.monks-combat-details.displayBarsCombat") ?? getProperty(app.object, "flags.monks-combat-details.displayBarsCombat"));
+            let value = (app.document instanceof TokenDocument ? app.document.getFlag('monks-combat-details', 'displayBarsCombat') : foundry.utils.getProperty(app.document.token, "flags.monks-combat-details.displayBarsCombat") ?? getProperty(app.document, "flags.monks-combat-details.displayBarsCombat"));
 
             $('[name="displayBars"]', combatBars).attr('name', 'flags.monks-combat-details.displayBarsCombat').prepend($('<option>').attr('value', '-1').html('')).val(value);
             $('> label', combatBars).html(i18n("MonksCombatDetails.CombatDisplayBars"));
@@ -76,7 +76,7 @@ export class CombatBars {
             }
         });
 
-        patchFunc("Token.prototype.drawBars", function (wrapped, ...args) {
+        patchFunc("foundry.canvas.placeables.Token.prototype.drawBars", function (wrapped, ...args) {
             if (this.inCombat && this.document.displayBars === CONST.TOKEN_DISPLAY_MODES.NONE && this.document.flags['monks-combat-details']?.displayBarsCombat !== CONST.TOKEN_DISPLAY_MODES.NONE) {
                 this.document.displayBars = 5;
                 wrapped.call(this, ...args);
@@ -85,7 +85,7 @@ export class CombatBars {
                 wrapped.call(this, ...args);
         });
 
-        patchFunc("Token.prototype.refreshHUD", function (wrapped, ...args) {
+        patchFunc("foundry.canvas.placeables.Token.prototype._refreshState", function (wrapped, ...args) {
             wrapped.call(this, ...args);
             if (this.inCombat) {
                 let combatBar = this.document.getFlag('monks-combat-details', 'displayBarsCombat');

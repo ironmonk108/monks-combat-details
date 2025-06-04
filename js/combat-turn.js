@@ -31,6 +31,8 @@ export class CombatTurn {
             return wrapped(...args);
         }
 
+        foundry.applications.sidebar.tabs.CombatTracker.prototype.constructor.PARTS.tracker.scrollable = [""];
+
         patchFunc("Combat.prototype.nextTurn", combatNextTurn);
 
         Hooks.on("deleteCombatant", function (combatant, data, userId) {
@@ -45,9 +47,9 @@ export class CombatTurn {
                 CombatTurn.checkCombatTurn(combat);
         });
 
-        Hooks.on("deleteCombat", function (combat) {
+        Hooks.on("deleteCombat", async function (combat) {
             if (setting('round-chatmessages') && combat && game.user.isTheGM && combat.started) {
-                ChatMessage.create({ user: game.user, flavor: i18n("MonksCombatDetails.RoundEnd") }, { roundmarker: true });
+                let msg = await ChatMessage.create({ user: game.user, flavor: i18n("MonksCombatDetails.RoundEnd"), flags: { 'monks-combat-details': { "roundmarker": true } } }, { roundmarker: true });
             }
 
             if (combat && combat.started && setting('show-start')) {
@@ -128,9 +130,9 @@ export class CombatTurn {
 
             if (setting('round-chatmessages') && combat && game.user.isTheGM) {
                 if (combatStarted) {
-                    ChatMessage.create({ user: game.user, flavor: i18n("MonksCombatDetails.RoundStart") }, { roundmarker: true });
+                    let msg = await ChatMessage.create({ user: game.user, flavor: i18n("MonksCombatDetails.RoundStart"), flags: { 'monks-combat-details': { "roundmarker": true } } }, { roundmarker: true });
                 } else if (Object.keys(delta).some((k) => k === "round")) {
-                    await ChatMessage.create({ user: game.user, flavor: `${i18n("MonksCombatDetails.Round")} ${delta.round}` }, { roundmarker: true });
+                    let msg = await ChatMessage.create({ user: game.user, flavor: `${i18n("MonksCombatDetails.Round")} ${delta.round}`, flags: { 'monks-combat-details': { "roundmarker": true } } }, { roundmarker: true });
                 }
             }
 
@@ -139,10 +141,10 @@ export class CombatTurn {
             }
 
             if (combat && combat.started && (delta.round || delta.turn) && setting('auto-scroll')) {
-                $(`#sidebar #combat-tracker li[data-combatant-id="${combat.current.combatantId}"]`).each(function () {
+                $(`#combat .combat-tracker li[data-combatant-id="${combat.current.combatantId}"]`).each(function () {
                     $(this).parent().scrollTop(Math.max(this.offsetTop, 0)); // - $(this).height()
                 });
-                $(`#combat-popout #combat-tracker li[data-combatant-id="${combat.current.combatantId}"]`).each(function () {
+                $(`#combat-popout .combat-tracker li[data-combatant-id="${combat.current.combatantId}"]`).each(function () {
                     $(this).parent().scrollTop(Math.max(this.offsetTop - $('#combat-popout .combat-tracker-header').height() - 32, 0)); // - $(this).height()
                     //this.scrollIntoView({ behavior: "smooth" });
                 });
@@ -160,15 +162,16 @@ export class CombatTurn {
             }
         });
 
-        Hooks.on("createChatMessage", (message, options, user) => {
+        Hooks.on("createChatMessage", async (message, options, user) => {
             if (options.roundmarker && game.user.isGM) {
-                message.setFlag('monks-combat-details', 'roundmarker', true);
+                message._roundmarker = true;
+                await message.setFlag('monks-combat-details', 'roundmarker', true);
             }
         });
 
-        Hooks.on("renderChatMessage", (message, html, data) => {
-            if (message.getFlag('monks-combat-details', 'roundmarker')) {
-                html.addClass('round-marker');
+        Hooks.on("renderChatMessageHTML", (message, html, data) => {
+            if (message._roundmarker || message.getFlag('monks-combat-details', 'roundmarker')) {
+                $(html).addClass('round-marker');
             }
         });
 
@@ -231,7 +234,7 @@ export class CombatTurn {
         shadow.alpha = 0.3;
         shadow.angle = token.document.rotation;
 
-        let tokenImage = await loadTexture(token.document.texture.src || "icons/svg/mystery-man.svg")
+        let tokenImage = await foundry.canvas.loadTexture(token.document.texture.src || "icons/svg/mystery-man.svg")
         let sprite = new PIXI.Sprite(tokenImage)
         
         //sprite.filters = [radialFadeFilter];

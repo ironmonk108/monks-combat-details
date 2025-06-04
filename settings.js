@@ -1,7 +1,7 @@
 import { MonksCombatDetails, i18n } from "./monks-combat-details.js";
 
 export const registerSettings = function () {
-    // Register any custom module settings here
+	// Register any custom module settings here
 	let modulename = "monks-combat-details";
 
 	let dialogpositions = {
@@ -43,8 +43,8 @@ export const registerSettings = function () {
 		'true': i18n("MonksCombatDetails.placeholderoptions.sidebar"),
 		'popout': i18n("MonksCombatDetails.placeholderoptions.popout"),
 		'both': i18n("MonksCombatDetails.placeholderoptions.both"),
-        'false': i18n("MonksCombatDetails.placeholderoptions.none")
-    }
+		'false': i18n("MonksCombatDetails.placeholderoptions.none")
+	}
 
 	// combat preparation
 	game.settings.register(modulename, "prevent-initiative", {
@@ -104,13 +104,13 @@ export const registerSettings = function () {
 
 	game.settings.register(modulename, "placeholder-image", {
 		name: i18n("MonksCombatDetails.placeholder-image.name"),
-        hint: i18n("MonksCombatDetails.placeholder-image.hint"),
-        scope: "world",
-        config: true,
+		hint: i18n("MonksCombatDetails.placeholder-image.hint"),
+		scope: "world",
+		config: true,
 		default: "icons/svg/mystery-man.svg",
 		type: String,
 		filePicker: 'image'
-    });
+	});
 
 	game.settings.register(modulename, "show-combat-playlist", {
 		name: i18n("MonksCombatDetails.show-combat-playlist.name"),
@@ -146,14 +146,7 @@ export const registerSettings = function () {
 		scope: "world",
 		config: true,
 		default: true,
-		type: Boolean,
-		onChange: (value) => {
-			if (value && $('#combat-notification').length === 0) {
-				$("#sidebar-tabs a[data-tab='combat']").append(`<i id="combat-notification" class="notification-pip fas fa-exclamation-circle" style="display: none;"></i>`);
-			} else if (!value) {
-				$('#combat-notification').remove();
-			}
-		}
+		type: Boolean
 	});
 
 	//combat details
@@ -433,7 +426,7 @@ export const registerSettings = function () {
 			// change the css variable
 			document.querySelector(':root').style.setProperty("--MonksCombatDetails-large-print-size", value + "px");
 		},
-    });
+	});
 	game.settings.register(modulename, "play-next-sound", {
 		name: i18n("MonksCombatDetails.next-sound.name"),
 		hint: i18n("MonksCombatDetails.next-sound.hint"),

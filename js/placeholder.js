@@ -1,12 +1,14 @@
 import { MonksCombatDetails, i18n, log, debug, setting, patchFunc } from "../monks-combat-details.js";
 
-export class PlaceholderCombatant {
+export class MCD_Placeholder {
     static init() {
         Hooks.on("renderCombatTracker", (app, html, data) => {
-            if (game.user.isGM && (setting("enable-placeholders") == "both" || (setting("enable-placeholders") == "true" && !app.popOut) || (setting("enable-placeholders") == "popout" && app.popOut)) && app.viewed) {
-                $('<nav>').addClass("directory-footer flexrow add-placeholder").append(
-                    $("<a>").html(`<i class="fa fa-plus"></i> ${i18n("MonksCombatDetails.AddPlaceholder")}`).on("click", PlaceholderCombatant.addPlaceholder.bind(this, app)))
-                    .insertBefore($("#combat-controls", html));
+            if (game.user.isGM && (setting("enable-placeholders") == "both" || (setting("enable-placeholders") == "true" && !app.isPopout) || (setting("enable-placeholders") == "popout" && app.isPopout)) && app.viewed) {
+                if ($('nav.combat-controls.add-placeholder', html).length == 0) {
+                    $('<nav>').addClass("combat-controls add-placeholder").append(
+                        $("<button>").attr("type", "button").addClass("combat-control combat-control-lg").html(`<i class="fa fa-plus"></i> ${i18n("MonksCombatDetails.AddPlaceholder")}`).on("click", MCD_Placeholder.addPlaceholder.bind(this, app)))
+                        .insertBefore($(".combat-controls", html));
+                }
             }
 
             if (app.viewed?.combatants) {
@@ -19,26 +21,22 @@ export class PlaceholderCombatant {
             }
         });
 
-        Hooks.on("getCombatTrackerEntryContext", (html, menu) => {
+        Hooks.on("getCombatTrackerContextOptions", (app, menu) => {
             let idx = menu.findIndex(m => m.name == "COMBAT.CombatantUpdate") || 1;
             menu.splice(idx, 0,
                 {
                     name: i18n("MonksCombatDetails.CreatePlaceholder"),
                     icon: '<i class="fas fa-user"></i>',
                     condition: li => {
-                        let combatant = game.combats.viewed.combatants.get(li.data("combatant-id"));
+                        let combatant = game.combats.viewed.combatants.get($(li).data("combatant-id"));
                         return combatant && !combatant.getFlag("monks-combat-details", "placeholder");
                     },
                     callback: li => {
-                        let combatant = game.combats.viewed.combatants.get(li.data("combatant-id"));
+                        let combatant = game.combats.viewed.combatants.get($(li).data("combatant-id"));
                         if (combatant) {
-                            let combatantData = combatant.toObject();
-                            combatant = new Combatant(combatantData);
+                            combatant = new PlaceholderCombatant(combatant);
                             delete combatant._id;
-                            if (combatant.initiative)
-                                combatant.initiative = combatant.initiative - 1;
-                            combatant.name = combatant.name + " [Placeholder]"
-                            new PlaceholderCombatantConfig(combatant).render(true);
+                            new PlaceholderCombatantConfig({ document: combatant }).render(true);
                         }
                     }
                 });
@@ -67,23 +65,13 @@ export class PlaceholderCombatant {
             return wrapped(...args);
         }
 
-        patchFunc("CombatTracker.prototype._onConfigureCombatant", ConfigureCombatant, "MIXED");
+        patchFunc("foundry.applications.sidebar.tabs.CombatTracker.prototype._onConfigureCombatant", ConfigureCombatant, "MIXED");
     }
 
     static addPlaceholder(app) {
-        let combatant = new Combatant();
-        combatant.img = setting("placeholder-image");
+        let combatant = new PlaceholderCombatant(app.viewed);
         delete combatant._id;
-        if (app.viewed?.started && app.viewed?.combatant?.initiative) {
-            combatant.initiative = app.viewed.combatant?.initiative - 1;
-            if (app.viewed?.combatant?.combat.nextCombatant?.initiative) {
-                let diff = app.viewed?.combatant?.initiative - app.viewed?.combatant?.combat.nextCombatant?.initiative;
-                if (diff <= 1 && diff >= 0)
-                    // set combatant initiative to halfway between current and next combatant round to one decimal place
-                    combatant.initiative = Math.round((app.viewed.combatant?.initiative + app.viewed.combatant?.combat.nextCombatant?.initiative) / 2 * 10) / 10;
-            }  
-        }
-        new PlaceholderCombatantConfig(combatant).render(true);
+        new PlaceholderCombatantConfig({ document: combatant }).render(true);
     }
 
     static createPlaceholder({ combat, combatant, initiative, removeAfter, img, name, hidden } = {}) {
@@ -116,7 +104,33 @@ export class PlaceholderCombatant {
     }
 }
 
-export class PlaceholderCombatantConfig extends CombatantConfig {
+class PlaceholderCombatant extends Combatant {
+    constructor(entity) {
+        let data = { name: i18n("MonksCombatDetails.PlaceholderCombatantName"), img: setting("placeholder-image") };
+
+        let combat = entity instanceof Combat ? entity : entity.combat;
+        let combatant = entity instanceof Combatant ? entity : combat?.combatant;
+
+        if (entity instanceof Combatant) {
+            data = combatant.toObject();
+            data.img = combatant.img || setting("placeholder-image");
+            data.name = combatant.name + " [Placeholder]"
+        }
+
+        if (combatant.initiative)
+            data.initiative = combatant.initiative - 1;
+
+        if (combat?.started && combat.nextCombatant?.initiative) {
+            let diff = combatant?.initiative - combat.nextCombatant?.initiative;
+            if (diff <= 1 && diff >= 0)
+                // set combatant initiative to halfway between current and next combatant round to one decimal place
+                data.initiative = Math.round((combatant?.initiative + combat.nextCombatant?.initiative) / 2 * 10) / 10;
+        }
+        super(data, { parent: combat });
+    }
+}
+
+export class PlaceholderCombatantConfig extends foundry.applications.sheets.CombatantConfig {
     constructor(object, options) {
         super(object, options);
     }
