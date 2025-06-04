@@ -1,3 +1,7 @@
+# version 13.01
+
+v13 Compatibility
+
 # version 12.02
 
 Fixing issues where combatant is deselected when remembering last target

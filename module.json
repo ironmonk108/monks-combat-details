@@ -1,13 +1,13 @@
 {
   "title": "Monk's Combat Details",
-  "description": "A bunch of quality of life things to make running combat a little easier.  Including turn notification, combat automations, combat tracker upgrades, and token status bars specifically for combat.",
-  "version": "12.02",
+  "description": "A bunch of quality of life things to make running combat a little easier. Including turn notification, combat automations, combat tracker upgrades, and token status bars specifically for combat.",
+  "version": "13.01",
   "authors": [
     {
       "name": "IronMonk",
-      "discord": "ironmonk88#4075",
+      "discord": "ironmonk108",
 	  "flags": {
-		  "github": "ironmonk88",
+		  "github": "ironmonk108",
 		  "patreon": "ironmonk",
 		  "ko-fi": "ironmonk88"
 	  }
@@ -68,18 +68,18 @@
   "styles": [
     "css/monks-combat-details.css"
   ],
-  "url": "https://github.com/ironmonk88/monks-combat-details",
-  "download": "https://github.com/ironmonk88/monks-combat-details/archive/12.02.zip",
-  "manifest": "https://github.com/ironmonk88/monks-combat-details/releases/latest/download/module.json",
-  "bugs": "https://github.com/ironmonk88/monks-combat-details/issues",
+  "url": "https://github.com/ironmonk108/monks-combat-details",
+  "download": "https://github.com/ironmonk108/monks-combat-details/archive/13.01.zip",
+  "manifest": "https://github.com/ironmonk108/monks-combat-details/releases/latest/download/module.json",
+  "bugs": "https://github.com/ironmonk108/monks-combat-details/issues",
   "id": "monks-combat-details",
   "compatibility": {
-    "minimum": "12",
-    "verified": "12"
+    "minimum": "13",
+    "verified": "13"
   },
   "name": "monks-combat-details",
-  "minimumCoreVersion": "12",
-  "compatibleCoreVersion": "12",
+  "minimumCoreVersion": "13",
+  "compatibleCoreVersion": "13",
   "flags": {
     "allowBugReporter": true
   }
