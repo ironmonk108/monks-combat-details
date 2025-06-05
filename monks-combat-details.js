@@ -81,7 +81,6 @@ export class MonksCombatDetails {
 	}
 
 	static init() {
-		CONFIG.debug.hooks = true; //enable hooks debugging
 		if (game.MonksCombatDetails == undefined)
 			game.MonksCombatDetails = MonksCombatDetails;
 
