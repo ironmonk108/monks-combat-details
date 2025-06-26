@@ -1,3 +1,7 @@
+# version 13.03
+
+Removing support for the transition from Little Details to Combat Details.  If you havn't updated by now, then transferring settings isn't going to be a big help.
+
 # version 13.02
 
 Removing debug code

@@ -521,16 +521,4 @@ export const registerSettings = function () {
 		default: "",
 		type: String
 	});
-
-	game.settings.register(modulename, "transfer-settings", {
-		scope: "world",
-		config: false,
-		default: false,
-	});
-
-	game.settings.register(modulename, "transfer-settings-client", {
-		scope: "client",
-		config: false,
-		default: false,
-	});
 };
