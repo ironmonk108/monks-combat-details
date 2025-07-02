@@ -96,6 +96,11 @@
     background: none !important;
 }
 
+#chat-notifications .chat-log .message.round-marker {
+    background: rgba(255, 255, 255, 0.7) !important;
+    border-radius: 4px;
+}
+
 body.system-sw5e .chat-log .message.round-marker {
     border-bottom: transparent !important;
 }
@@ -116,6 +121,10 @@ body.system-sw5e .chat-log .message.round-marker {
     flex: 1;
     color: #f0f0e0 !important;
     grid-area: unset;
+}
+
+#chat-notifications .chat-log .message.round-marker .message-header .flavor-text {
+    color: #333 !important;
 }
 
 .chat-log .message.round-marker .message-header .chat-control {
@@ -212,4 +221,12 @@ body.system-dnd5e .chat-log .message.round-marker .message-header .chat-control 
 
 li.combatant.placeholder .combatant-controls > *:not([data-control="toggleHidden"]) {
     display: none;
+}
+
+.notransition {
+    -o-transition: none !important;
+    -ms-transition: none !important;
+    -moz-transition: none !important;
+    -webkit-transition: none !important;
+    transition: none !important;
 }

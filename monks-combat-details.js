@@ -176,9 +176,9 @@ export class MonksCombatDetails {
 						let lastPlaying = game.combats.active?.getFlag("monks-combat-details", "lastPlaying");
 						if (lastPlaying) {
 							for (let playing of lastPlaying) {
-								let playlist = await fromUuid(playing);
-								if (playlist)
-									playlist.playAll();
+								let sound = await fromUuid(playing);
+								if (sound)
+									sound.parent?.playSound(sound);
 							}
 						}
 					}
@@ -293,7 +293,8 @@ export class MonksCombatDetails {
 
 		patchFunc("CONFIG.Combat.documentClass.prototype._sortCombatants", function (wrapped, ...args) {
 			let combatants = args;
-			if (combatants.length && setting("order-initiative") && !combatants[0].combat.started) {
+			let combat = game.combats.active;
+			if (combatants.length && setting("order-initiative") && !combat?.started) {
 				if (!game.user.isGM) {
 					let [a, b] = args;
 					let aTopOrder = !a.initiative && a.isOwner;
@@ -352,8 +353,8 @@ export class MonksCombatDetails {
 			top = position.top;
 		}
 
-		app.position.left = left;
-		app.position.top = top;
+		app.position.left = left == 0 || left == null ? 0.01 : left;
+		app.position.top = top == 0 || top == null ? 0.01 : top;
 
 		$(app.element).css({ top: app.position.top, left: app.position.left });
 
@@ -598,9 +599,9 @@ Hooks.on("deleteCombat", async function (combat) {
 		let lastPlaying = combat.getFlag("monks-combat-details", "lastPlaying");
 		if (lastPlaying) {
 			for (let playing of lastPlaying) {
-				let playlist = await fromUuid(playing);
-				if (playlist)
-					playlist.playAll();
+				let sound = await fromUuid(playing);
+				if (sound)
+					sound.parent?.playSound(sound);
 			}
 		}
 
@@ -665,13 +666,10 @@ Hooks.on("updateCombat", async function (combat, delta) {
 			await game.settings.set("monks-combat-details", "combat-playlist", id);
 		}
 
-		let currentlyPlaying = ui.playlists._playing.playlists.map(ps => ps.playing ? ps.uuid : null).filter(p => !!p);
+		let currentlyPlaying = ui.playlists._playing.sounds.map(ps => ps.uuid).filter(p => !!p);
 		for (let playing of currentlyPlaying) {
-			let playlist = await fromUuid(playing);
-			playlist.update({ playing: false });
-			for (let sound of playlist.sounds) {
-				sound.update({ playing: false, pausedTime: sound.sound.currentTime });
-			}
+			let sound = await fromUuid(playing);
+			sound.update({ playing: false, pausedTime: sound.sound.currentTime });
 		}
 		await combat.setFlag("monks-combat-details", "lastPlaying", currentlyPlaying);
 
@@ -777,6 +775,23 @@ Hooks.on('renderCombatTracker', async (app, html, data) => {
 			$(el).attr("data-tooltip", i18n(effect.label));
 		}
 	});
+
+	if (game.user.isGM && data.combat.started) {
+		let endCombatBtn = $("button[data-action='endCombat']", html);
+		let nextTurnBtn = endCombatBtn.prev("button[data-action='nextTurn']", html);
+		let countEnemies = data.combat.combatants.filter(c => c.hasPlayerOwner == false && !MonksCombatDetails.isDefeated(c.token)).length;
+		if (nextTurnBtn.length == 0) {
+			nextTurnBtn = $('<button>').attr('type', 'button').attr("data-action", "nextTurn").addClass("combat-control combat-control-lg")
+				.append($('<i>').addClass("fa-solid fa-check"))
+				.append($('<span>').html("End Turn"))
+				.insertBefore(endCombatBtn);
+		}
+
+		if (countEnemies == 0)
+			nextTurnBtn.addClass("icon fa-solid fa-check notransition").removeClass("combat-control-lg").attr("data-tooltip", $("span", nextTurnBtn).html()).html("");
+		else
+			endCombatBtn.addClass("icon fa-solid fa-xmark notransition").removeClass("combat-control-lg").attr("data-tooltip", $("span", endCombatBtn).html()).html("");
+	}
 });
 
 Hooks.on("renderSettingsConfig", (app, html, data) => {

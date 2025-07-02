@@ -1,3 +1,13 @@
+# version 13.04
+
+Added different background to the round messages when in the notification area
+
+Fixed issue with playing sunds when combat starts
+
+Fixed issue with positioning the combat window
+
+Added a next turn button while there's still combatants active in a combat, because why would you want the largest button on the combat tracker to end the combat when you're still in the middle of combat.
+
 # version 13.03
 
 Removing support for the transition from Little Details to Combat Details.  If you havn't updated by now, then transferring settings isn't going to be a big help.
