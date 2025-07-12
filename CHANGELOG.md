@@ -1,3 +1,7 @@
+# version 13.05
+
+Fixing issues checking to see if combat has started
+
 # version 13.04
 
 Added different background to the round messages when in the notification area

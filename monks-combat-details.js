@@ -765,7 +765,7 @@ Hooks.on('renderCombatTracker', async (app, html, data) => {
 	}
 
 	//don't show the previous or next turn if this isn't the GM
-	if (!game.user.isGM && data.combat && data.combat.started) {
+	if (!game.user.isGM && data.combat?.started) {
 		$('.combat-control[data-action="previousTurn"],.combat-control[data-action="nextTurn"]:last', html).css({visibility:'hidden'});
 	}
 
@@ -776,7 +776,7 @@ Hooks.on('renderCombatTracker', async (app, html, data) => {
 		}
 	});
 
-	if (game.user.isGM && data.combat.started) {
+	if (game.user.isGM && data.combat?.started) {
 		let endCombatBtn = $("button[data-action='endCombat']", html);
 		let nextTurnBtn = endCombatBtn.prev("button[data-action='nextTurn']", html);
 		let countEnemies = data.combat.combatants.filter(c => c.hasPlayerOwner == false && !MonksCombatDetails.isDefeated(c.token)).length;

@@ -1,7 +1,7 @@
 {
   "title": "Monk's Combat Details",
   "description": "A bunch of quality of life things to make running combat a little easier. Including turn notification, combat automations, combat tracker upgrades, and token status bars specifically for combat.",
-  "version": "13.04",
+  "version": "13.05",
   "authors": [
     {
       "name": "IronMonk",
@@ -69,7 +69,7 @@
     "css/monks-combat-details.css"
   ],
   "url": "https://github.com/ironmonk108/monks-combat-details",
-  "download": "https://github.com/ironmonk108/monks-combat-details/archive/13.04.zip",
+  "download": "https://github.com/ironmonk108/monks-combat-details/archive/13.05.zip",
   "manifest": "https://github.com/ironmonk108/monks-combat-details/releases/latest/download/module.json",
   "bugs": "https://github.com/ironmonk108/monks-combat-details/issues",
   "id": "monks-combat-details",
