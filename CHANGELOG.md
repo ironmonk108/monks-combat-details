@@ -1,3 +1,43 @@
+# version 13.05
+
+Fixing issues checking to see if combat has started
+
+# version 13.04
+
+Added different background to the round messages when in the notification area
+
+Fixed issue with playing sunds when combat starts
+
+Fixed issue with positioning the combat window
+
+Added a next turn button while there's still combatants active in a combat, because why would you want the largest button on the combat tracker to end the combat when you're still in the middle of combat.
+
+# version 13.03
+
+Removing support for the transition from Little Details to Combat Details.  If you havn't updated by now, then transferring settings isn't going to be a big help.
+
+# version 13.02
+
+Removing debug code
+
+# version 13.01
+
+v13 Compatibility
+
+# version 12.02
+
+Fixing issues where combatant is deselected when remembering last target
+
+Adding default placeholder image
+
+Added the option to show the combat CR while the combat is in progress
+
+Fixed issue when changing the dead to invisible, it's no longer tied with the auto defeated setting.
+
+Fixed issue with not showing the combatant sheet when there's only one enemy in the combat.
+
+Fixed issue with setting the defeated effect
+
 # version 12.01
 
 v12 Compatibility

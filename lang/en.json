@@ -90,6 +90,10 @@
 	"MonksCombatDetails.show-combat-playlist.hint": "Show a dropdown for the combat playlist when setting up combat",
 	"MonksCombatDetails.placeholder-initiative.name": "Placeholder Initiative",
 	"MonksCombatDetails.placeholder-initiative.hint": "Roll Formula to use when determining the placeholder initiative",
+	"MonksCombatDetails.placeholder-image.name": "Placeholder Image",
+	"MonksCombatDetails.placeholder-image.hint": "Image to use for the default placeholder token",
+	"MonksCombatDetails.show-combat-cr-in-combat.name": "Show CR in Combat",
+	"MonksCombatDetails.show-combat-cr-in-combat.hint": "Show the CR of the encounter in the combat tracker while in combat",
 
 	"MonksCombatDetails.Round": "Round",
 	"MonksCombatDetails.RoundEnd": "Round End",
@@ -114,6 +118,8 @@
 	"MonksCombatDetails.RerollInitiative": "Reroll Initiative",
 	"MonksCombatDetails.CombatPlaylist": "Combat Playlist",
 	"MonksCombatDetails.CombatPlaylistHint": "Select a playlist to play when combat starts.  Any currently playing tracks will be paused during combat and will resume once the combat has ended",
+	"MonksCombatDetails.ShowCombatCR": "Show Encounter CR",
+	"MonksCombatDetails.ShowCombatCRHint": "Show the estimated CR of the encounter in the combat tracker",
 
 	"MonksCombatDetails.PreventTokenMessage": "Once in combat, a token cannot be removed except through the encounter interface.",
 
@@ -124,6 +130,8 @@
 	"MonksCombatDetails.CombatTurn": "Combat Turn Notification",
 
 	"MonksCombatDetails.CombatDisplayBars": "Combat Display Bars:",
+
+	"MonksCombatDetails.PlaceholderCombatantName": "Placeholder",
 
 	"MonksCombatDetails.unknown": "-",
 	"MonksCombatDetails.easy": "Easy",
