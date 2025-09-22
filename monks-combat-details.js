@@ -923,7 +923,7 @@ Hooks.on("updateCombatant", async function (combatant, data, options, userId) {
 			let effect = CONFIG.statusEffects.find(e => e.id === CONFIG.specialStatusEffects.DEFEATED) || CONFIG.controlIcons.defeated;
 			const exists = a.statuses.has(effect?.id ?? effect);
 			if (exists != data.defeated) {
-				await a.toggleStatusEffect(effect?.id ?? effect, { active: data.defeated });
+				await a.toggleStatusEffect(effect?.id ?? effect, { active: data.defeated, overlay: true });
 			}
 		}
 	}
