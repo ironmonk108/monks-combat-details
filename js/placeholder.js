@@ -9,6 +9,8 @@ export class MCD_Placeholder {
                         $("<button>").attr("type", "button").addClass("combat-control combat-control-lg").html(`<i class="fa fa-plus"></i> ${i18n("MonksCombatDetails.AddPlaceholder")}`).on("click", MCD_Placeholder.addPlaceholder.bind(this, app)))
                         .insertBefore($(".combat-controls", html));
                 }
+            } else if ($('nav.combat-controls.add-placeholder', html).length > 0) {
+                $('nav.combat-controls.add-placeholder', html).remove();
             }
 
             if (app.viewed?.combatants) {
@@ -27,15 +29,14 @@ export class MCD_Placeholder {
                 {
                     name: i18n("MonksCombatDetails.CreatePlaceholder"),
                     icon: '<i class="fas fa-user"></i>',
-                    condition: li => {
-                        let combatant = game.combats.viewed.combatants.get($(li).data("combatant-id"));
+                    visible: li => {
+                        let combatant = game.combats.viewed.combatants.get(li.dataset.combatantId);
                         return combatant && !combatant.getFlag("monks-combat-details", "placeholder");
                     },
                     callback: li => {
-                        let combatant = game.combats.viewed.combatants.get($(li).data("combatant-id"));
+                        let combatant = game.combats.viewed.combatants.get(li.dataset.combatantId);
                         if (combatant) {
                             combatant = new PlaceholderCombatant(combatant);
-                            delete combatant._id;
                             new PlaceholderCombatantConfig({ document: combatant }).render(true);
                         }
                     }
@@ -51,7 +52,7 @@ export class MCD_Placeholder {
             return wrapped(...args);
         }
 
-        patchFunc("Combatant.prototype.getInitiativeRoll", CombatantInitiative, "MIXED");
+        patchFunc("foundry.documents.Combatant.prototype.getInitiativeRoll", CombatantInitiative, "MIXED");
 
         let ConfigureCombatant = function (wrapped, ...args) {
             let [li] = args;
@@ -106,18 +107,30 @@ export class MCD_Placeholder {
 
 class PlaceholderCombatant extends Combatant {
     constructor(entity) {
-        let data = { name: i18n("MonksCombatDetails.PlaceholderCombatantName"), img: setting("placeholder-image") };
+        let data = {
+            name: i18n("MonksCombatDetails.PlaceholderCombatantName"),
+            img: setting("placeholder-image"),
+        };
 
-        let combat = entity instanceof Combat ? entity : entity.combat;
+        let combat = entity instanceof Combat ? entity : entity?.combat;
         let combatant = entity instanceof Combatant ? entity : combat?.combatant;
+
+        if (combat == null) return;
 
         if (entity instanceof Combatant) {
             data = combatant.toObject();
+            delete data._id;
             data.img = combatant.img || setting("placeholder-image");
             data.name = combatant.name + " [Placeholder]"
         }
 
-        if (combatant.initiative)
+        data.flags = {
+            "monks-combat-details": {
+                placeholder: true
+            }
+        };
+
+        if (combatant?.initiative)
             data.initiative = combatant.initiative - 1;
 
         if (combat?.started && combat.nextCombatant?.initiative) {
@@ -141,27 +154,29 @@ export class PlaceholderCombatantConfig extends foundry.applications.sheets.Comb
         });
     }
 
-    async _render(force = false, options = {}) {
-        await super._render(force, options);
+    async render(force = false, options = {}) {
+        await super.render(force, options);
         $(`input[name="defeated"]`, this.element).parent().remove();
         $('<div>').addClass("form-group")
             .append($('<label>').html(i18n("MonksCombatDetails.RemoveAfter")))
             .append($('<input>').attr("type", "number").css({
                 "text-align": "right",
                 "flex": "0 0 75px"
-        }).attr("name", "flags.monks-combat-details.removeAfter").val(this.object.getFlag("monks-combat-details", "removeAfter")))
+        }).attr("name", "flags.monks-combat-details.removeAfter").val(this.document.getFlag("monks-combat-details", "removeAfter")))
             .insertBefore($(`footer`, this.element));
 
         this.setPosition({ height: "auto" });
     }
 
-    async _updateObject(event, formData) {
-        formData["flags.monks-combat-details.placeholder"] = true;
-        formData["flags.monks-combat-details.removeStart"] = game.combat.round;
-        if (!this.object._id) {
-            formData.actorId = this.object.actorId;
-            formData.tokenId = this.object.tokenId;
+    _prepareSubmitData(event, form, formData, updateData) {
+        let submitData = super._prepareSubmitData(event, form, formData, updateData);
+        foundry.utils.setProperty(submitData, "flags.monks-combat-details.placeholder", true);
+        foundry.utils.setProperty(submitData, "flags.monks-combat-details.removeStart", game.combat.round);
+        if (!this.document._id) {
+            submitData.actorId = this.document.actorId;
+            submitData.tokenId = this.document.tokenId;
         }
-        super._updateObject(event, formData);
+        return submitData;
     }
+    
 }

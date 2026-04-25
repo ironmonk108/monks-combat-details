@@ -2,10 +2,11 @@
     --MonksCombatDetails-large-print-size: 80px;
 }
 
-.group-header {
+.form-group.group-header {
     font-weight: bold;
     padding: 8px 20px;
     background-color: rgba(255, 255, 255, 0.4);
+    border-radius: 8px;
 }
 
 .combat-playlist-row {
@@ -15,7 +16,7 @@
 .combat-playlist-row select {
     font-size: var(--font-size-14);
     border: transparent;
-    background-color: var(--color-select-option-bg);
+    background-color: var(--input-background-color);
 }
 
 .encounter-cr-row {

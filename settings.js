@@ -5,7 +5,7 @@ export const registerSettings = function () {
 	let modulename = "monks-combat-details";
 
 	let dialogpositions = {
-		'': '—',
+		'': 'Manual',
 		'topleft': 'Top Left',
 		'topright': 'Top Right',
 		'bottomleft': 'Bottom Left',
@@ -256,14 +256,6 @@ export const registerSettings = function () {
 		default: "starts",
 		type: String
 	});
-	game.settings.register(modulename, "remember-position", {
-		name: i18n("MonksCombatDetails.remember-position.name"),
-		hint: i18n("MonksCombatDetails.remember-position.hint"),
-		scope: "client",
-		config: true,
-		default: true,
-		type: Boolean
-	});
 	game.settings.register(modulename, "opencombat", {
 		name: i18n("MonksCombatDetails.opencombat.name"),
 		hint: i18n("MonksCombatDetails.opencombat.hint"),
@@ -355,6 +347,7 @@ export const registerSettings = function () {
 		config: true,
 		default: false,
 		type: Boolean,
+		requiresReload: true
 	});
 	game.settings.register(modulename, "combat-bar-opacity", {
 		name: i18n("MonksCombatDetails.combat-bar-opacity.name"),
@@ -507,13 +500,14 @@ export const registerSettings = function () {
 		default: false,
 		type: Boolean
 	});
-
+	/*
 	game.settings.register(modulename, "reroll-initiative", {
 		scope: "world",
 		config: false,
 		default: false,
 		type: Boolean
 	});
+	*/
 
 	game.settings.register(modulename, "combat-playlist", {
 		scope: "world",

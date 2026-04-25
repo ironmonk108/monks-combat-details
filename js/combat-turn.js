@@ -43,13 +43,18 @@ export class CombatTurn {
         Hooks.on("createCombatant", function (combatant, data, options) {
             let combat = combatant.parent;
 
-            if (combatant.actor?.isOwner == true)
+            if (combatant.isOwner == true)
                 CombatTurn.checkCombatTurn(combat);
         });
 
         Hooks.on("deleteCombat", async function (combat) {
             if (setting('round-chatmessages') && combat && game.user.isTheGM && combat.started) {
-                let msg = await ChatMessage.create({ user: game.user, flavor: i18n("MonksCombatDetails.RoundEnd"), flags: { 'monks-combat-details': { "roundmarker": true } } }, { roundmarker: true });
+                let msg = await foundry.documents.ChatMessage.implementation.create(
+                    {
+                        user: game.user,
+                        flavor: i18n("MonksCombatDetails.RoundEnd"),
+                        flags: { 'monks-combat-details': { "roundmarker": true } }
+                    }, { roundmarker: true });
             }
 
             if (combat && combat.started && setting('show-start')) {
@@ -90,17 +95,17 @@ export class CombatTurn {
                 }
             }
 
-            if (combat && combat.started && combat?.combatant?.token?.isOwner && setting('select-combatant')) {
+            if (combat && combat.started && combat?.combatant?.isOwner && setting('select-combatant')) {
                 combat?.combatant?.token?._object?.control();
             }
 
-            if (combat && combat.started && game.user.isGM && setting("pan-to-combatant") && combat?.combatant?.token) {
+            if (combat && combat.started && setting("pan-to-combatant") && combat?.combatant?.token && combat?.combatant?.isOwner) {
                 if (canvas.dimensions.rect.contains(combat?.combatant?.token.x, combat?.combatant?.token.y)) {
                     canvas.animatePan({ x: combat?.combatant?.token.x, y: combat?.combatant?.token.y });
                 }
             }
 
-            if (combat && combat.started && setting('remember-previous') && combat?.combatant?.token?.isOwner) {
+            if (combat && combat.started && setting('remember-previous') && combat?.combatant?.isOwner && !combat?.combatant?.getFlag('monks-combat-details', 'placeholder')) {
                 let targets = [];
                 if (game.user.isGM)
                     targets = combat.combatant.token.getFlag('monks-combat-details', 'targets');
@@ -130,9 +135,19 @@ export class CombatTurn {
 
             if (setting('round-chatmessages') && combat && game.user.isTheGM) {
                 if (combatStarted) {
-                    let msg = await ChatMessage.create({ user: game.user, flavor: i18n("MonksCombatDetails.RoundStart"), flags: { 'monks-combat-details': { "roundmarker": true } } }, { roundmarker: true });
+                    let msg = await foundry.documents.ChatMessage.implementation.create(
+                        {
+                            user: game.user,
+                            flavor: i18n("MonksCombatDetails.RoundStart"),
+                            flags: { 'monks-combat-details': { "roundmarker": true } }
+                        }, { roundmarker: true });
                 } else if (Object.keys(delta).some((k) => k === "round")) {
-                    let msg = await ChatMessage.create({ user: game.user, flavor: `${i18n("MonksCombatDetails.Round")} ${delta.round}`, flags: { 'monks-combat-details': { "roundmarker": true } } }, { roundmarker: true });
+                    let msg = await foundry.documents.ChatMessage.implementation.create(
+                        {
+                            user: game.user,
+                            flavor: `${i18n("MonksCombatDetails.Round")} ${delta.round}`,
+                            flags: { 'monks-combat-details': { "roundmarker": true } }
+                        }, { roundmarker: true });
                 }
             }
 
@@ -157,7 +172,7 @@ export class CombatTurn {
         Hooks.on("updateCombatant", async function (combatant, data, options, userId) {
             const combat = combatant.parent;
 
-            if (combat && combat.started && combatant.actor?.isOwner && data.defeated != undefined) {
+            if (combat && combat.started && combatant.isOwner && data.defeated != undefined) {
                 CombatTurn.checkCombatTurn(combat);
             }
         });
@@ -289,7 +304,8 @@ export class CombatTurn {
             let msg = setting("turn-message");
 
             let context = {
-                combatant
+                combatant,
+                player: game.user
             };
 
             const compiled = Handlebars.compile(msg);
@@ -313,7 +329,8 @@ export class CombatTurn {
             let msg = setting("nextup-message");
 
             let context = {
-                combatant
+                combatant,
+                player: game.user
             };
 
             const compiled = Handlebars.compile(msg);
@@ -364,13 +381,13 @@ export class CombatTurn {
             if (next == undefined || next >= combat.turns.length)
                 next = findNext(-1);
 
-            let isActive = entry?.actor?.isOwner;
+            let isActive = game.user.isGM ? entry?.isNPC : entry?.isOwner;
             let nextentry = null;
             let isNext = false;
 
             if (next != null) {
                 nextentry = combat.turns[next];
-                isNext = nextentry.actor?.isOwner; //_id === game.users.current.character?._id;
+                isNext = game.user.isGM ? nextentry?.isNPC : nextentry.isOwner; //_id === game.users.current.character?._id;
             }
 
             debug('Check combat turn', entry?.name, nextentry?.name, !game.user.isGM, isActive, isNext, entry, nextentry);

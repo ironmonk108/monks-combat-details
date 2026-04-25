@@ -1,3 +1,37 @@
+# Version 14.01
+
+v14 Compatibility
+
+Fixed issue with combat tracker grouping styling
+
+Fixed combat tracker playlist tracker styling
+
+Fixed issue when creating a combatant if there was no associated actor
+
+Fixed pan to combatant for players
+
+Fixed issue with remembering previous targets when placeholders ahve been added to the tracker
+
+Added player information to available data that can be used for the next and yout turn messages
+
+Fixed issue with GM being spammed with turn messages for player characters
+
+Fixed placeholder button appearing when it shouldn't
+
+Fixed initiative roll for placeholders when using a custom formula
+
+Fixed issues creating a placeholder
+
+Fixed combat tracker positioning
+
+Fixed preventing combat spells from being altered while in combat
+
+Fixed call to combatTurn not passing the combat properly
+
+Fixed issues with displaying the current combatant's character sheet
+
+Replaced the "remember position" setting to just use the dialog position.  So if you can set the combat tracker to open in a set position, or in a manually selected position.
+
 # version 13.05
 
 Fixing issues checking to see if combat has started
