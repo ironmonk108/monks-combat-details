@@ -19,7 +19,7 @@
 	"MonksCombatDetails.combat-position.name": "Pozycja okna śledzenia walki",
 	"MonksCombatDetails.combat-position.hint": "Umieszczenie okna śledzenia spotkania bojowego po jego otwarciu zamiast na środku ekranu.",
 	"MonksCombatDetails.opencombat.name": "Wyskakujące okno śledzenia spotkania",
-	"MonksCombatDetails.opencombat.hint": "Podczas rozpoczynania walki wyskakuje okno śledzenia spotkania i przełącza się na okno czatu.",
+	"MonksCombatDetails.opencombat.hint": "Podczas rozpoczynania walki wyskakuje okno śledzenia spotkania",
 	"MonksCombatDetails.switch-combat-tab.name": "Przejdź do zakładki walki",
 	"MonksCombatDetails.switch-combat-tab.hint": "Gdy walka zostanie utworzona, automatycznie przełączy się na zakładkę walki.",
 	"MonksCombatDetails.switch-chat-tab.name": "Przejdź do zakładki czatu",
