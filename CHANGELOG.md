@@ -1,3 +1,11 @@
+# Version 14.02
+
+Fixing an issue with setPosition that was blocking MonksCommonDisplay
+
+Fixed button text overflow in combat tracker
+
+Fixing Round marker display in light mode
+
 # Version 14.01
 
 v14 Compatibility
@@ -10,9 +18,9 @@ Fixed issue when creating a combatant if there was no associated actor
 
 Fixed pan to combatant for players
 
-Fixed issue with remembering previous targets when placeholders ahve been added to the tracker
+Fixed issue with remembering previous targets when placeholders have been added to the tracker
 
-Added player information to available data that can be used for the next and yout turn messages
+Added player information to available data that can be used for the next and your turn messages
 
 Fixed issue with GM being spammed with turn messages for player characters
 

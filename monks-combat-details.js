@@ -302,7 +302,7 @@ export class MonksCombatDetails {
 			return wrapped(...args);
 		});
 
-		patchFunc("foundry.applications.sidebar.tabs.CombatTracker.prototype.setPosition", async function (wrapped, ...args) {
+		patchFunc("foundry.applications.sidebar.tabs.CombatTracker.prototype.setPosition", function (wrapped, ...args) {
 			let position = wrapped(...args);
 			MonksCombatDetails.persistPosition(position);
 			return position;
@@ -345,7 +345,8 @@ export class MonksCombatDetails {
 	}
 
 	static onPersistPosition(position) {
-		game.user.setFlag("monks-combat-details", "combat-position", position);
+		if (position)
+			game.user.setFlag("monks-combat-details", "combat-position", position);
 	}
 
 	static isDefeated(token) {

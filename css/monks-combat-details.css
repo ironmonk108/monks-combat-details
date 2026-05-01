@@ -78,8 +78,12 @@
     text-align: center;
 }
 
-#combat #combat-controls {
+.combat-sidebar .combat-controls {
     min-height: 38px;
+}
+
+.combat-sidebar .combat-controls .combat-control {
+    white-space: nowrap;
 }
 
 .chat-log .message.round-marker {
@@ -124,6 +128,10 @@ body.system-sw5e .chat-log .message.round-marker {
     grid-area: unset;
 }
 
+.chat-log.theme-light .message.round-marker .message-header .flavor-text {
+    color: var(--color-dark-4) !important;
+}
+
 #chat-notifications .chat-log .message.round-marker .message-header .flavor-text {
     color: #333 !important;
 }
@@ -157,6 +165,10 @@ body.system-dnd5e .chat-log .message.round-marker .message-header .message-metad
     margin-top: 10px;
     line-height: 2px;
     color: var(--color-text-dark-secondary);
+}
+
+body.system-dnd5e .chat-log.theme-light .message.round-marker .message-header .message-metadata {
+    color: var(--color-dark-4) !important;
 }
 
 .chat-log .message.round-marker .message-header .message-delete,
