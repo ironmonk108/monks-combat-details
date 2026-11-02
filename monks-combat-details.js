@@ -548,7 +548,7 @@ export class MonksCombatDetails {
 	}
 
 	static async AutoDefeated(hp, actor, token) {
-		if (setting('auto-defeated') != 'none' && game.user.isGM) {
+		if (setting('auto-defeated') != 'none' && game.user.isTheGM) {
 			token = token || game.combats?.viewed?.combatants.find(c => c.actor?.id == actor.id)?.token;
 			if (hp != undefined && (setting('auto-defeated').startsWith('all') || token?.disposition != 1)) {
 				let combatant = token?.combatant;
@@ -937,7 +937,7 @@ Hooks.on("updateToken", async function (document, data, options, userid) {
 
 Hooks.on("updateCombatant", async function (combatant, data, options, userId) {
 	const combat = combatant.parent;
-	if (combat && combat.started && data.defeated != undefined && setting('auto-defeated') != 'none' && game.user.isGM) {
+	if (combat && combat.started && data.defeated != undefined && setting('auto-defeated') != 'none' && game.user.isTheGM) {
 		let t = combatant.token
 		const a = combatant.token?.actor;
 
